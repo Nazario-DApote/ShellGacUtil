@@ -1,0 +1,25 @@
+﻿Licenza BSD
+
+Copyright (c) 2014, Nazario D'Apote
+Tutti i diritti riservati.
+
+La ridistribuzione e l'uso in forma di codice sorgente e in forma binaria, con o senza modifiche, è consentito 
+purché siano rispettate le seguenti condizioni:
+
+1. Le ridistribuzioni del codice sorgente devono conservare la nota di copyright sopra riportata, questa lista di condizioni
+   e la seguente limitazione di responsabilità.
+2. Le ridistribuzioni in forma binarie devono riprodurre la nota di copyright sopra riportata, questa lista di condizioni
+   e la seguente limitazione di responsabilità nella documentazione e/o altri materiali forniti con la distribuzione.
+3. Ogni materiale pubblicitario che riporti caratteristiche o uso di questo software deve mostrare la seguente attestazione:
+   Questo prodotto include software sviluppati dalla <organizzazione>.
+4. Né il nome della <organizzazione>, né i nomi dei suoi collaboratori possono essere utilizzati per avallare o promuovere prodotti
+   derivati da questo software senza uno specifico permesso scritto.
+
+Questo software è fornito dal <possessore di copyright> "così com'è" e qualsiasi
+garanzia espressa o implicita, inclusiva di, ma non limitata a, garanzie implicite
+di commerciabilità e idoneità ad uno scopo particolare, viene disconosciuta. In nessun caso il possessore
+di copyright sarà ritenuto responsabile per qualsiasi danno diretto, indiretto, connesso, particolare,
+esemplare o conseguente (inclusivo di, ma non limitato a, approvvigionamento di beni o servizi alternativi;
+perdita di utilità, dati o profitti; interruzione di affari) comunque causati e su qualsiasi ipotesi di
+responsabilità, come da contratto, responsabilità oggettiva, o torto (compresa negligenza o altro)
+derivante in qualsiasi modo dall'utilizzo di questo software anche se al corrente della possibilità di tale danno.

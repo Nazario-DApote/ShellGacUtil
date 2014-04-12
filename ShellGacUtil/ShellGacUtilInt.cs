@@ -25,11 +25,19 @@ namespace ShellGacUtil
             //  Create the menu strip.
             var menu = new ContextMenuStrip();
 
-            //  Create a 'count lines' item.
+            //  Create a drop-down item.
+            ToolStripMenuItem itemDropdown = new ToolStripMenuItem
+            {
+                Text = "GAC Utilities",
+                Image = Properties.Resource.MainIcon.ToBitmap(),
+            };
+
+            //  Add the submenu to the context menu.
+            menu.Items.Add(itemDropdown);
+
             var register = new ToolStripMenuItem
             {
                 Text = "Re&gister",
-                //Image = Properties.Resources.CountLines
             };
 
             var unregister = new ToolStripMenuItem
@@ -40,7 +48,6 @@ namespace ShellGacUtil
             var showInfo = new ToolStripMenuItem
             {
                 Text = "Show &Assembly Info",
-
             };
 
             var copyName = new ToolStripMenuItem
@@ -49,16 +56,21 @@ namespace ShellGacUtil
             };
 
             //  When we click, we'll count the lines.
-            register.Click += (sender, args) => Register();
-            unregister.Click += (sender, args) => Unregister();
-            showInfo.Click += (sender, args) => ShowAssemblyInfo();
-            copyName.Click += (sender, args) => CopyQualifiedName();
+            register.Click += (s, a) => Register();
+            unregister.Click += (s, a) => Unregister();
+            showInfo.Click += (s, a) => ShowAssemblyInfo();
+            copyName.Click += (s, a) => CopyQualifiedName();
 
             //  Add the item to the context menu.
-            menu.Items.Add(register);
-            menu.Items.Add(unregister);
-            menu.Items.Add(showInfo);
-            menu.Items.Add(copyName);
+            itemDropdown.DropDownItems.Add(register);
+            itemDropdown.DropDownItems.Add(unregister);
+            itemDropdown.DropDownItems.Add(showInfo);
+            itemDropdown.DropDownItems.Add(copyName);
+
+            //menu.Items.Add(register);
+            //menu.Items.Add(unregister);
+            //menu.Items.Add(showInfo);
+            //menu.Items.Add(copyName);
 
             //  Return the menu.
             return menu;

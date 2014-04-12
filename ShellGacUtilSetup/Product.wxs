@@ -13,22 +13,22 @@
              Manufacturer="$(var.prodAuthor)"
              Platform="x86"
              Id="*"
-             Comments="Example of Wix setup" />
+             Comments="$(var.prodLicense)" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
     <MediaTemplate />
 
-    <!--<Icon Id="SetupIcon" SourceFile="$(env.WIX)\bin\ProjectFile.ico"/>-->
+    <Icon Id="SetupIcon" SourceFile="$(var.ShellGacUtil.ProjectDir)Resources\ShellGacUtil.ico"/>
     
-    <!--<Property Id="ARPPRODUCTICON" Value="SetupIcon" />-->
-    <Property Id="ARPCOMMENTS" Value="(c) Amazing Software" />
+    <Property Id="ARPPRODUCTICON" Value="SetupIcon" />
+    <Property Id="ARPCOMMENTS" Value="$(var.prodLicense)" />
     <Property Id="ARPNOREPAIR" Value="0" />
-    <Property Id="ARPCONTACT" Value="Nazario D'Apote" />
-    <Property Id="ARPHELPLINK" Value="http://www.MYURL.com/AmazingSoftware/support.html"/>
-    <Property Id="ARPREADME" Value="http://www.MYURL.com/AmazingSoftware/readme.html" />
-    <Property Id="ARPHELPTELEPHONE" Value="+(39) 356 659478" />
-    <Property Id="ARPURLINFOABOUT" Value="http://www.MYURL.com/AmazingSoftware/about.html"/>
-    <Property Id="ARPURLUPDATEINFO" Value="http://www.MYURL.com/AmazingSoftware/changelog.html"/>
+    <Property Id="ARPCONTACT" Value="$(var.prodAuthor)" />
+    <!--<Property Id="ARPHELPLINK" Value=""/>
+    <Property Id="ARPREADME" Value="" />
+    <Property Id="ARPHELPTELEPHONE" Value="" />
+    <Property Id="ARPURLINFOABOUT" Value=""/>
+    <Property Id="ARPURLUPDATEINFO" Value=""/>-->
 
     <PropertyRef Id="PREREQUISITES" />
     
@@ -61,6 +61,8 @@
         <File Id="ShellGacUtilDll" Source="$(var.ShellGacUtil.TargetDir)ShellGacUtil.dll" KeyPath="yes"/>
         <File Id="SharpShellDll" Source="$(var.ShellGacUtil.TargetDir)SharpShell.dll"/>
         <File Id="SrmExe" Source="$(var.ShellGacUtil.ProjectDir)..\packages\SharpShellTools.2.1.0.1\lib\srm.exe"/>
+        <File Id="LicenseTxt" Source="$(var.ShellGacUtil.TargetDir)License.txt"/>
+        <File Id="LicenzaTxt" Source="$(var.ShellGacUtil.TargetDir)Licenza.txt"/>
 			</Component>
 		</ComponentGroup>
 	</Fragment>
