@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- TODO: Put your code here. -->
+  <?define prodName = "ShellGacUtil" ?>
+  <?define prodVer = "1.0.0.1" ?>
+  <?define prodAuthor = "Nazario Software" ?>
+</Include>

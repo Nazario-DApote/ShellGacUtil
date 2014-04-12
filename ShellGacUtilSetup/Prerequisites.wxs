@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Fragment>
+    <Property Id="PREREQUISITES" Value="Prerequisites" />
+
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message= "You must install Microsoft .NET Framework 4.0 or higher.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <Property Id="WindowsVersion" Value="1" />
+    <Condition Message= "OS must be Windows XP or higher.">
+      <![CDATA[Installed OR VersionNT >= 501]]>
+    </Condition>
+   
+    <Condition Message="You need to be an administrator to install this product.">
+      <![CDATA[Privileged]]>
+    </Condition>
+	</Fragment>
+</Wix>

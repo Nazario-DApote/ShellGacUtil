@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?include Defines.wxi ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	<Product Id="*" Name="$(var.prodName)" Language="1033" Version="$(var.prodVer)" Manufacturer="$(var.prodAuthor)" UpgradeCode="4432f44d-7f79-4643-a1c9-6b811f35dec7">
+
+    <Package InstallerVersion="200"
+             Compressed="yes"
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             SummaryCodepage="1252"
+             Description="Shell extension for easy GAC management"
+             Keywords="Installer"
+             Manufacturer="$(var.prodAuthor)"
+             Platform="x86"
+             Id="*"
+             Comments="Example of Wix setup" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
+    <MediaTemplate />
+
+    <!--<Icon Id="SetupIcon" SourceFile="$(env.WIX)\bin\ProjectFile.ico"/>-->
+    
+    <!--<Property Id="ARPPRODUCTICON" Value="SetupIcon" />-->
+    <Property Id="ARPCOMMENTS" Value="(c) Amazing Software" />
+    <Property Id="ARPNOREPAIR" Value="0" />
+    <Property Id="ARPCONTACT" Value="Nazario D'Apote" />
+    <Property Id="ARPHELPLINK" Value="http://www.MYURL.com/AmazingSoftware/support.html"/>
+    <Property Id="ARPREADME" Value="http://www.MYURL.com/AmazingSoftware/readme.html" />
+    <Property Id="ARPHELPTELEPHONE" Value="+(39) 356 659478" />
+    <Property Id="ARPURLINFOABOUT" Value="http://www.MYURL.com/AmazingSoftware/about.html"/>
+    <Property Id="ARPURLUPDATEINFO" Value="http://www.MYURL.com/AmazingSoftware/changelog.html"/>
+
+    <PropertyRef Id="PREREQUISITES" />
+    
+		<Feature Id="ProductFeature" Title="ShellGacUtil" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+
+    <CustomAction Id="InstallShell" FileKey="SrmExe" ExeCommand='install "[INSTALLFOLDER]\ShellGacUtil.dll" -codebase' Execute="deferred" Return="check" Impersonate="no" />
+    <CustomAction Id="UninstallShell" FileKey="SrmExe" ExeCommand='uninstall "[INSTALLFOLDER]\ShellGacUtil.dll"' Execute="deferred" Return="check" Impersonate="no" />
+
+    <InstallExecuteSequence>
+      <Custom Action="InstallShell" After="InstallFiles">NOT Installed</Custom>
+      <Custom Action="UninstallShell" Before="RemoveFiles">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+    </InstallExecuteSequence>
+    
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="ShellGacUtil" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Guid="{F60F0F11-AB59-49BC-A8B0-33B8EF49EC8A}" Id="ProductComponent">
+        <File Id="WinFormsDll" Source="$(var.ShellGacUtil.ProjectDir)..\packages\SharpShellTools.2.1.0.1\lib\Apex.WinForms.dll"/>
+        <File Id="ShellGacUtilDll" Source="$(var.ShellGacUtil.TargetDir)ShellGacUtil.dll" KeyPath="yes"/>
+        <File Id="SharpShellDll" Source="$(var.ShellGacUtil.TargetDir)SharpShell.dll"/>
+        <File Id="SrmExe" Source="$(var.ShellGacUtil.ProjectDir)..\packages\SharpShellTools.2.1.0.1\lib\srm.exe"/>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
