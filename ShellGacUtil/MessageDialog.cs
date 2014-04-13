@@ -1,33 +1,17 @@
-
-
-#region Copyright notice
-/*
- *      This is a as-is implementation and feel free to use the code (certainly with necessary modifications)
- * to fulfil any custom requrements.
- *      It would be well appreciated if you just keep the copyright notice intact. 
- * 
- *                                                                              Moim Hossain
- *                                                                              Sr. Software Engineer
- *                                                                              Orion Informatics.
- */
-#endregion
-
-#region Using Directives
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-#endregion
 
-namespace AssemblyRegUtil
+namespace ShellGacUtil
 {
     public partial class MessageDialog : Form
     {
+        private Size initSize; 
+
         public MessageDialog()
         {
             InitializeComponent();
+            initSize = new Size(298, 147);
         }
 
         /// <summary>
@@ -37,9 +21,10 @@ namespace AssemblyRegUtil
         /// <param name="e"></param>
         private void lnkDetails_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            this.SuspendLayout();
             if (lblDetails.Visible)
             {
-                this.Size = new Size(298, 147);
+                this.Size = initSize;
                 lblDetails.Visible = false;
             }
             else
@@ -47,6 +32,7 @@ namespace AssemblyRegUtil
                 this.Size = new Size(298, 301);
                 lblDetails.Visible = true;
             }
+            this.ResumeLayout();
         }
 
         /// <summary>
@@ -56,7 +42,7 @@ namespace AssemblyRegUtil
         /// <param name="e"></param>
         private void MessageDialog_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(298, 147);
+            this.Size = initSize;
             lblDetails.Visible = false;
         }
 
