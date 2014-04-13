@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include>
   <?define prodName = "ShellGacUtil" ?>
-  <?define prodVer = "1.0.0.1" ?>
+  <?define prodVer = "1.0.1.0" ?>
   <?define prodAuthor = "Nazario D'Apote Software" ?>
   <?define prodLicense = "BSD License Copyright (c) 2014, Nazario D'Apote" ?>
 </Include>
