@@ -13,17 +13,19 @@ namespace System.GACManagedAccess
         /// Copy the qualified name into the clipboard
         /// </summary>
         /// <param name="fileName">The file name</param>
-        public void CopyFullQualifiedName(string fileName)
+        public string GetFullQualifiedName(string fileName)
         {
             try
             {
                 Assembly assmbly = Assembly.LoadFile(fileName);
-                Clipboard.SetDataObject(assmbly.FullName, true);
+                return assmbly.FullName;
             }
             catch ( Exception ex )
             {
                 OnLog(ex.Message);
             }
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -208,6 +210,13 @@ namespace System.GACManagedAccess
         string _message;
         bool _error = false;
         string _msgDetails;
+        string _qualifiedName;
+
+        public string QualifiedName
+        {
+            get { return _qualifiedName; }
+            private set { _qualifiedName = value; }
+        }
 
         public string MessageDetails
         {
@@ -228,23 +237,37 @@ namespace System.GACManagedAccess
         }
 
         public LogEventArgs(string msg, string dtls = "")
-            : this(msg, dtls, false)
+            : this(msg, msg, dtls, false)
+        {
+        }
+
+        public LogEventArgs(string msg, string qName, string dtls)
+            : this(msg, qName, dtls, false)
         {
         }
 
         public LogEventArgs(string msg, bool error)
-            : this(msg, "", error)
+            : this(msg, msg, string.Empty, error)
         {
         }
 
         public LogEventArgs(string msg, string dtls, bool error)
+            : this(msg, msg, dtls, error)
         {
-            Message = msg;
         }
 
         public LogEventArgs(Exception e)
-            : this(e.Message, "", true)
+            : this(e.Message, e.Message, string.Empty, true)
         {
         }
+
+        public LogEventArgs(string msg, string qName, string dtls, bool error)
+        {
+            Message = msg;
+            MessageDetails = dtls;
+            QualifiedName = qName;
+            IsError = error;
+        }
+
     }
 }

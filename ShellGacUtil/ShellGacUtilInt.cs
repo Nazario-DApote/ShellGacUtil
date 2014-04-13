@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.GACManagedAccess;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-using AssemblyRegUtil;
-using AssemblyRegUtil.Supports;
 using SharpShell.Attributes;
 using SharpShell.SharpContextMenu;
+using ShellGacUtil.Supports;
+using System.Diagnostics;
 
 namespace ShellGacUtil
 {
@@ -28,7 +28,7 @@ namespace ShellGacUtil
             //  Create a drop-down item.
             ToolStripMenuItem itemDropdown = new ToolStripMenuItem
             {
-                Text = "GAC Utilities",
+                Text = "&GAC Utilities",
                 Image = Properties.Resource.MainIcon.ToBitmap(),
             };
 
@@ -67,13 +67,18 @@ namespace ShellGacUtil
             itemDropdown.DropDownItems.Add(showInfo);
             itemDropdown.DropDownItems.Add(copyName);
 
-            //menu.Items.Add(register);
-            //menu.Items.Add(unregister);
-            //menu.Items.Add(showInfo);
-            //menu.Items.Add(copyName);
-
             //  Return the menu.
             return menu;
+        }
+
+        private static void ShowLog(object sender, LogEventArgs args)
+        {
+            MessageDialog msgDialog = new MessageDialog();
+            msgDialog.MessageText = args.Message;
+            msgDialog.QualifiedName = args.QualifiedName;
+            msgDialog.MessageDetails = args.MessageDetails;
+            msgDialog.EnableClipboardCopy = ( !string.IsNullOrEmpty(msgDialog.QualifiedName) );
+            msgDialog.ShowDialog();
         }
 
         /// <summary>
@@ -81,15 +86,56 @@ namespace ShellGacUtil
         /// </summary>
         private void CopyQualifiedName()
         {
+#if DEBUG
+            if ( !Debugger.IsAttached )
+                Debugger.Launch();
+#endif
+            var log = new LogCollector();
             GacManager gm = new GacManager();
-            gm.Log += (sender, e) => FileLog(sender, e);
+            gm.Log += log.Collector;
 
+            StringBuilder qlgNames = new StringBuilder();
             foreach ( string fileName in SelectedItemPaths )
             {
-                gm.CopyFullQualifiedName(fileName);
+                var aName = gm.GetFullQualifiedName(fileName);
+                if( !string.IsNullOrEmpty(aName) )
+                    qlgNames.AppendLine(aName);
             }
 
-            gm.Log -= (sender, e) => FileLog(sender, e);
+            gm.Log -= log.Collector;
+
+            Clipboard.SetDataObject(qlgNames.ToString(), true);
+            if ( log.Error )
+                ShowLog(this, log.MakeLogEventArgs()); 
+        }
+        
+        /// <summary>
+        /// Register the assembly into the GAC
+        /// </summary>
+        private void Register()
+        {
+#if DEBUG
+            if ( !Debugger.IsAttached )
+                Debugger.Launch();
+#endif
+            var log = new LogCollector();
+            GacManager gm = new GacManager();
+            gm.Log += log.Collector;
+
+            foreach ( string fileName in SelectedItemPaths )
+            {     
+		        gm.AddAssemblyToCache(fileName);
+            }
+
+            gm.Log -= log.Collector;
+
+            string msg = null;
+            if ( !log.Error )
+                msg = "Successfully added to the Global Assembly Cache.";
+            else
+                msg = "Failed to register the assembly.";
+
+            ShowLog(this, new LogEventArgs(msg, log.Message, log.Message, log.Error)); 
         }
 
         /// <summary>
@@ -97,98 +143,51 @@ namespace ShellGacUtil
         /// </summary>
         private void ShowAssemblyInfo()
         {
+#if DEBUG
+            if ( !Debugger.IsAttached )
+                Debugger.Launch();
+#endif
+            var log = new LogCollector();
             GacManager gm = new GacManager();
-            gm.Log += (sender, e) => ShowLog(sender, e);
+            gm.Log += log.Collector;
 
             foreach ( string fileName in SelectedItemPaths )
             {
                 gm.ShowAssemblyInfo(fileName);
             }
 
-            gm.Log -= (sender, e) => ShowLog(sender, e);
+            gm.Log -= log.Collector;
+
+            ShowLog(this, log.MakeLogEventArgs()); 
         }
 
         /// <summary>
-        /// Register the assembly into the GAC
-        /// </summary>
-        private void Register()
-        {
-            GacManager gm = new GacManager();
-            gm.Log += (sender, e) => RegisterLog(sender, e);
-
-            foreach (string fileName in SelectedItemPaths)
-            {
-                gm.AddAssemblyToCache(fileName);
-            }
-
-            gm.Log -= (sender, e) => RegisterLog(sender, e);
-        }
-
-        /// <summary>
-        ///     Perform Unregistrations
+        /// Perform Unregistrations
         /// </summary>
         private void Unregister()
         {
+#if DEBUG
+            if ( !Debugger.IsAttached )
+                Debugger.Launch();
+#endif
+            var log = new LogCollector();
             GacManager gm = new GacManager();
-            gm.Log += (sender, e) => UnRegisterLog(sender, e);
+            gm.Log += log.Collector;
 
             foreach ( string fileName in SelectedItemPaths )
             {
                 gm.RemoveAssemblyFromCache(fileName);
             }
 
-            gm.Log -= (sender, e) => UnRegisterLog(sender, e);
-        }
+            gm.Log -= log.Collector;
 
-        private static void ShowLog(object sender, LogEventArgs args)
-        {
-            MessageDialog msgDialog = new MessageDialog();
-            msgDialog.MessageText = args.Message;
-            msgDialog.QualifiedName = args.Message;
-            msgDialog.MessageDetails = args.MessageDetails;
-            msgDialog.EnableClipboardCopy = true;
-            msgDialog.ShowDialog();
-        }
-
-        private static void RegisterLog(object sender, LogEventArgs args)
-        {
-            MessageDialog msgDialog = new MessageDialog();
-
-            if ( !args.IsError )
-            {   // if the success contains into the message then its okay 
-                msgDialog.MessageText = "Successfully added to the Global Assembly Cache.";
-            }
+            string msg = null;
+            if ( !log.Error )
+                msg = "Successfully removed from the Global Assembly Cache.";
             else
-            {   // failure
-                msgDialog.MessageText = "Failed to register the assembly.";
-            }
+                msg = "Failed to unregister the assembly.";
 
-            msgDialog.MessageDetails = args.Message;
-            msgDialog.ShowDialog();
-        }
-
-        private static void UnRegisterLog(object sender, LogEventArgs args)
-        {
-            MessageDialog msgDialog = new MessageDialog();
-
-            if ( !args.IsError )
-            {   // if the success contains into the message then its okay 
-                msgDialog.MessageText = "Successfully removed from the Global Assembly Cache.";
-            }
-            else
-            {   // failure
-                msgDialog.MessageText = "Failed to unregister the assembly.";
-            }
-
-            msgDialog.MessageDetails = args.Message;
-            msgDialog.ShowDialog();
-        }
-
-        private static void FileLog(object sender, LogEventArgs args)
-        {
-#if DEBUG
-            Logger.WriteLog(args.Message);
-#endif
+            ShowLog(this, new LogEventArgs(msg, log.Message, log.Message, log.Error)); 
         }
     }
 }

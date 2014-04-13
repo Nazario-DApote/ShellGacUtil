@@ -54,7 +54,6 @@
     </Compile>
     <Compile Include="Supports\Gac.cs" />
     <Compile Include="Supports\GACWrap.cs" />
-    <Compile Include="Supports\Logger.cs" />
     <Compile Include="ShellGacUtilInt.cs" />
     <Compile Include="MessageDialog.cs">
       <SubType>Form</SubType>
@@ -63,6 +62,7 @@
       <DependentUpon>MessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Supports\LogCollector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="install.bat">
