@@ -16,7 +16,7 @@
              Comments="$(var.prodLicense)" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." AllowSameVersionUpgrades="no" />
-    <MediaTemplate />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Icon Id="SetupIcon" SourceFile="$(var.ShellGacUtil.ProjectDir)Resources\ShellGacUtil.ico"/>
     

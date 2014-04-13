@@ -50,6 +50,13 @@
     </WixExtension>
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+    <PostBuildEvent>SET dst=$(ProjectDir)..\dist
+SET dstFileName=%25dst%25\$(TargetFileName)
+
+IF NOT EXIST "%25dst%25" MD "%25dst%25"
+COPY /Y "!(TargetPath)" "%25dstFileName%25"</PostBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.
