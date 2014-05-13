@@ -177,3 +177,4 @@ FakesAssemblies/
 # Project specific
 dist/*
 *.msi
+MetricResults/*
