@@ -12,6 +12,7 @@ namespace ShellGacUtil
 {
     [ComVisible(true)]
     [COMServerAssociation(AssociationType.ClassOfExtension, ".dll")]
+    [COMServerAssociation(AssociationType.ClassOfExtension, ".exe")]
     public class ShellGacUtilInt : SharpContextMenu
     {
         protected override bool CanShowMenu()
